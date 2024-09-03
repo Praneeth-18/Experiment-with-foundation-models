@@ -4,10 +4,9 @@
 
 [Part 4 Medium Link](https://medium.com/@saipraneethk181200/geminis-long-reach-10-ways-ai-is-redefining-our-world-749bf5290283)
 
+---
 
-# AI Projects and Demonstrations
-
-This repository contains artifacts and demonstrations for various AI-related tasks and projects, utilizing cutting-edge models such as Gemini, Claude, and GPT-4o. Below is a summary of each task, including the artifacts produced.
+This repository contains artifacts and demonstrations for various AI-related tasks and projects, utilizing cutting-edge models such as Gemini, Claude, and GPT-4o. Below is a summary of each task.
 
 ## Task A: Long Video Summarization using Gemini and Medium Article Writing
 
