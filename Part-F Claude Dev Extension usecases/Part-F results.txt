@@ -1,0 +1,265 @@
+1. Code Refactoring
+File: tasks.py
+
+Original Code:
+
+
+def get_task_by_id(tasks, task_id):
+    for task in tasks:
+        if task['id'] == task_id:
+            return task
+    return None
+
+def update_task_status(tasks, task_id, status):
+    for task in tasks:
+        if task['id'] == task_id:
+            task['status'] = status
+            return True
+    return False
+
+Task Performed: Refactor the code to improve readability by reducing redundancy and improving function composition.
+
+Refactored Code:
+
+
+def get_task_by_id(tasks, task_id):
+    return next((task for task in tasks if task['id'] == task_id), None)
+
+def update_task_status(tasks, task_id, status):
+    task = get_task_by_id(tasks, task_id)
+    if task:
+        task['status'] = status
+        return True
+    return False
+
+2. Code Commenting
+File: models.py
+
+Original Code:
+
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(20), default='pending')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+Task Performed: Generate comments explaining each field of the Task model.
+
+Commented Code:
+
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    # The title of the task, limited to 80 characters.
+    title = db.Column(db.String(80), nullable=False)
+    # A detailed description of the task, which is optional.
+    description = db.Column(db.Text, nullable=True)
+    # The current status of the task, defaulting to 'pending'.
+    status = db.Column(db.String(20), default='pending')
+    # The timestamp when the task was created.
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+3. Code Generation
+File: app.py
+
+Task Performed: Generate a new route to delete a task using Flask.
+
+Generated Code:
+
+
+@app.route('/tasks/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    task = Task.query.get(task_id)
+    if task:
+        db.session.delete(task)
+        db.session.commit()
+        return jsonify({'message': 'Task deleted successfully'}), 200
+    return jsonify({'error': 'Task not found'}), 404
+
+4. Autocomplete & Code Suggestions
+File: app.py
+
+Original Code:
+
+
+@app.route('/tasks', methods=['GET'])
+def get_tasks():
+    tasks = Task.query.all()
+    tasks_list = []
+    for task in tasks:
+        tasks_list.append({
+            'id': task.id,
+            'title': task.title,
+            'status': task.status
+        })
+    return jsonify(tasks_list)
+
+Task Performed: Provide suggestions to simplify the loop using list comprehension.
+
+Suggested Code:
+
+
+@app.route('/tasks', methods=['GET'])
+def get_tasks():
+    tasks = Task.query.all()
+    tasks_list = [{'id': task.id, 'title': task.title, 'status': task.status} for task in tasks]
+    return jsonify(tasks_list)
+
+5. Bug Detection and Fixing
+File: app.py
+
+Original Code:
+
+
+@app.route('/tasks/<int:task_id>', methods=['POST'])
+def update_task(task_id):
+    task = Task.query.get(task_id)
+    if task:
+        task.status = request.json.get('status', task.status)
+        db.session.commit()
+        return jsonify({'message': 'Task updated successfully'}), 200
+    return jsonify({'error': 'Task not found'}), 404
+
+Task Performed: Detect and fix potential issues, like missing validation for the status field.
+
+Fixed Code:
+
+
+@app.route('/tasks/<int:task_id>', methods=['POST'])
+def update_task(task_id):
+    task = Task.query.get(task_id)
+    if task:
+        new_status = request.json.get('status')
+        if new_status not in ['pending', 'in progress', 'completed']:
+            return jsonify({'error': 'Invalid status value'}), 400
+        task.status = new_status
+        db.session.commit()
+        return jsonify({'message': 'Task updated successfully'}), 200
+    return jsonify({'error': 'Task not found'}), 404
+
+6. Code Optimization
+File: tasks.py
+
+Original Code:
+
+
+def count_completed_tasks(tasks):
+    count = 0
+    for task in tasks:
+        if task['status'] == 'completed':
+            count += 1
+    return count
+
+Task Performed: Optimize the code to improve performance using built-in functions.
+
+Optimized Code:
+
+
+def count_completed_tasks(tasks):
+    return sum(1 for task in tasks if task['status'] == 'completed')
+
+7. Unit Test Generation
+Task Performed: Generate unit tests for the get_task_by_id function.
+
+Generated Unit Test Code:
+
+
+import unittest
+from tasks import get_task_by_id
+
+class TestTasks(unittest.TestCase):
+
+    def setUp(self):
+        self.tasks = [
+            {'id': 1, 'title': 'Task 1', 'status': 'pending'},
+            {'id': 2, 'title': 'Task 2', 'status': 'completed'}
+        ]
+
+    def test_get_task_by_id_found(self):
+        task = get_task_by_id(self.tasks, 1)
+        self.assertIsNotNone(task)
+        self.assertEqual(task['title'], 'Task 1')
+
+    def test_get_task_by_id_not_found(self):
+        task = get_task_by_id(self.tasks, 3)
+        self.assertIsNone(task)
+
+if __name__ == '__main__':
+    unittest.main()
+
+8. API Documentation Generation
+File: app.py
+
+Original Code:
+
+
+@app.route('/tasks/<int:task_id>', methods=['PUT'])
+def update_task(task_id):
+    task = Task.query.get(task_id)
+    if task:
+        task.status = request.json.get('status', task.status)
+        db.session.commit()
+        return jsonify({'message': 'Task updated successfully'}), 200
+    return jsonify({'error': 'Task not found'}), 404
+
+Task Performed: Generate API documentation for the update_task endpoint.
+
+Generated Documentation:
+
+
+### PUT /tasks/{task_id}
+Updates the status of a specific task.
+
+**Path Parameters:**
+- `task_id` (int): The ID of the task to update.
+
+**Request Body:**
+- `status` (string): The new status of the task. Accepted values are 'pending', 'in progress', 'completed'.
+
+**Responses:**
+- `200 OK`: The task was updated successfully.
+- `400 Bad Request`: The status provided is invalid.
+- `404 Not Found`: No task was found with the given ID.
+
+9. Code Translation
+File: tasks.py
+
+Original Code (Python):
+
+
+def is_task_completed(task):
+    return task['status'] == 'completed'
+
+Task Performed: Translate the Python function to JavaScript.
+
+Translated Code (JavaScript):
+
+
+function isTaskCompleted(task) {
+    return task.status === 'completed';
+}
+
+10. Code Review Assistance
+File: app.py
+
+Original Code:
+
+
+@app.route('/tasks/<int:task_id>', methods=['GET'])
+def get_task(task_id):
+    task = Task.query.get(task_id)
+    if task:
+        return jsonify({'id': task.id, 'title': task.title, 'status': task.status}), 200
+    return jsonify({'error': 'Task not found'}), 404
+
+Task Performed: Review the code and suggest improvements for better practices and readability.
+
+Reviewed and Improved Code:
+
+
+@app.route('/tasks/<int:task_id>', methods=['GET'])
+def get_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    return jsonify({'id': task.id, 'title': task.title, 'status': task.status})
