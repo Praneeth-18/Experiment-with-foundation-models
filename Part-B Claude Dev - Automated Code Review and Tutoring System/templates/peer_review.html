@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Peer Review{% endblock %}
+
+{% block content %}
+<h2>Peer Review</h2>
+<h3>Submission #{{ submission.id }}</h3>
+<p><strong>Language:</strong> {{ submission.language }}</p>
+<h4>Code</h4>
+<pre><code>{{ submission.code }}</code></pre>
+<form method="POST">
+    <div class="mb-3">
+        <label for="review" class="form-label">Your Review</label>
+        <textarea class="form-control" id="review" name="review" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Review</button>
+</form>
+{% endblock %}

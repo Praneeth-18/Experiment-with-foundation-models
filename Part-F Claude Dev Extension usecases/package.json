@@ -1,0 +1,15 @@
+{
+  "name": "258_final_project-main",
+  "version": "1.0.0",
+  "description": "[Project Report Link](https://docs.google.com/document/d/11hbjZfpXR2C6PgKxpLrhuE5oDf72uBq2FPDUJGOtfrU/edit?usp=sharing)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.9.1"
+  }
+}
